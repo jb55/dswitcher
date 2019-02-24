@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+remove_useless() {
+    if [ -z "$1" ]
+    then
+        cat
+    else
+        grep -v "$1"
+    fi
+}
+
 # dmenu cannot display more than 30 lines, to avoid screen clutter. Only relevant if you have more than 30 windows open.
 height=$(wmctrl -l | wc -l)
 if [[ $height -gt 30 ]]
@@ -8,6 +17,7 @@ if [[ $height -gt 30 ]]
 fi
 
 num=$(wmctrl -xl \
+     | remove_useless "$1" \
      | sed 's/  / /' \
      | cut -d " " -f 3- \
      | nl -w 3 -n rn \
